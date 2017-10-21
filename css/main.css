@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Pinyon+Script');
+
+h1 {
+  text-align: center;
+  font-family: "Pinyon Script", cursive;
+  color: gold;
+  font-size: 50px;
+  margin-bottom: -2px;
+  margin-top: -2px;
+}
+
+body {
+  background: wheat;
+  box-sizing: border-box;
+}
+
+.grid {
+  width: 230px;
+  border: 7px groove gold;
+  margin: 0 auto;
+  padding: 2px;
+  text-align: center;
+}
+
+.cell {
+  display: inline-block;
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin: -1px 0;
+  width: 20px;
+  height: 20px;
+}
+
+.block {
+  background-color: gray;
+}
+
+.pile {
+  background-color: orange;
+}
