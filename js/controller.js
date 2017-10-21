@@ -2,23 +2,31 @@ var T = T || {};
 
 T.Controller = (function(board, view){
 
+  var speed = 200;
+
   var init = function init() {
-    console.log("Initializing...");
-    board.init();
-    var grid = board.getGrid();
-    view.init(grid, {
-      playerControl: this.playerControl
+    view.init({
+      playerControl: this.playerControl,
+      startGame: this.startGame
     });
-    board.addCurrentBlock();
-    setInterval(this.gameLoop, 600);
   };
 
-  var gameLoop = function() {
+  var startGame = function() {
+    board.init();
+    var grid = board.getGrid();
+    view.generateDivs(grid);
+    board.addCurrentBlock();
+    var gameLoop = setInterval(loop, speed);
+  };
+
+  var loop = function() {
     view.reRender(board.getGrid());
     if (board.floorCollide() !== true && board.pileCollide() !== true) {
       board.blockFall();
     } else {
-      board.collision();
+      board.collision({
+        gameOver: gameOver
+      });
     }
   };
 
@@ -31,16 +39,25 @@ T.Controller = (function(board, view){
       if (board.floorCollide() !== true && board.pileCollide() !== true) {
         board.moveDown();
       } else {
-        board.collision();
+        board.collision({
+          gameOver: gameOver
+        });
       }
     }
-    view.reRender(board.getGrid());
+  };
+
+  var gameOver = function() {
+    console.log("GAME OVER!");
+    view.gameOver();
+    board.reset();
+    clearInterval(gameLoop);
   };
 
   return {
     init: init,
     playerControl: playerControl,
-    gameLoop: gameLoop
+    startGame: startGame,
+    gameOver: gameOver
   }
 
 })(T.Board, T.View);

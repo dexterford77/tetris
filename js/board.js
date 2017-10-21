@@ -6,9 +6,10 @@ T.Board = (function() {
     this.generateBoard();
   };
 
+  const blockTypes = ["square", "bar", "L", "S"];
+  var currentBlockType = "square";
+  var currentBlock = [];
   var grid = [];
-
-  var currentBlockCoords = {};
 
   var getGrid = function(){
     return grid;
@@ -25,47 +26,87 @@ T.Board = (function() {
   };
 
   var addCurrentBlock = function addCurrentBlock() {
-    var random = Math.floor(Math.random() * 10);
-    currentBlockCoords = {
-      x: random,
-      y: 0
-    };
-    grid[currentBlockCoords.y][currentBlockCoords.x] = 1;
+    // var currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
+    createBlock(currentBlockType);
+    for (i = 0; i < currentBlock.length; i++) {
+      grid[currentBlock[i][1]][currentBlock[i][0]] = 1;
+    }
+  };
+
+  var createBlock = function(blockType) {
+    var random;
+    if (blockType = "square") {
+      // gets random # btwn 0-8
+      random = Math.floor(Math.random() * 9);
+      currentBlock = [
+        [random, 0],
+        [random + 1, 0],
+        [random, 1],
+        [random + 1, 1]
+      ]
+    }
   };
 
   var blockFall = function blockFall() {
-    var x = currentBlockCoords.x;
-    var y = currentBlockCoords.y;
-    grid[y][x] = 0;
-    grid[y + 1][x] = 1;
-    currentBlockCoords.y = y + 1;
+
+    grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+    grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+    grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+    grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+    currentBlock[0][1] += 1;
+    currentBlock[1][1] += 1;
+    currentBlock[2][1] += 1;
+    currentBlock[3][1] += 1;
+    
+    grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+    grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+    grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+    grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
   };
 
   var moveHoriz = function(direction) {
-    var x = currentBlockCoords.x;
-    var y = currentBlockCoords.y;
-    var nextXValue = x + direction;
-    if (nextXValue > -1 && nextXValue < 10 && grid[y][nextXValue] === 0) {
-      grid[y][x + direction] = 1;
-      grid[y][x] = 0;
-      currentBlockCoords.x = x + direction;
-    } 
+    if ((currentBlock[0][0]+direction > -1) && (currentBlock[1][0]+direction > -1) && (currentBlock[2][0]+direction > -1) && (currentBlock[3][0]+direction > -1) && (currentBlock[0][0]+direction < 10) && (currentBlock[1][0]+direction < 10) && (currentBlock[2][0]+direction < 10) && (currentBlock[3][0]+direction < 10) && (grid[currentBlock[0][1]][currentBlock[0][0]+direction] !== 2) && (grid[currentBlock[1][1]][currentBlock[1][0]+direction] !== 2) && (grid[currentBlock[2][1]][currentBlock[2][0]+direction] !== 2) && (grid[currentBlock[3][1]][currentBlock[3][0]+direction] !== 2)) {
+
+      grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+      grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+      grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+      grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+      currentBlock[0][0] += direction;
+      currentBlock[1][0] += direction;
+      currentBlock[2][0] += direction;
+      currentBlock[3][0] += direction;
+
+      grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+      grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+      grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+      grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+    }
   };
 
   var moveDown = function() {
-    var x = currentBlockCoords.x;
-    var y = currentBlockCoords.y;
-    if (grid[y + 1][x] === 0) {
-      grid[y][x] = 0;
-      grid[y + 1][x] = 1;
-      currentBlockCoords.y = y + 1;
+    if ((grid[currentBlock[0][1]+1][currentBlock[0][0]] === 0) || (grid[currentBlock[1][1]+1][currentBlock[1][0]] === 0) || (grid[currentBlock[2][1]+1][currentBlock[2][0]] === 0) || (grid[currentBlock[3][1]+1][currentBlock[3][0]]) === 0) {
+      
+      grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+      grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+      grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+      grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+      currentBlock[0][1] += 1;
+      currentBlock[1][1] += 1;
+      currentBlock[2][1] += 1;
+      currentBlock[3][1] += 1;
+      
+      grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+      grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+      grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+      grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
     }
   };
 
   var floorCollide = function() {
-    var x = currentBlockCoords.x;
-    var y = currentBlockCoords.y;
-    if (y + 1 > grid.length - 1) {
+    if ((currentBlock[0][1] > grid.length-2) || (currentBlock[1][1] > grid.length-2) || (currentBlock[2][1] > grid.length-2) || (currentBlock[3][1] > grid.length-2)) {
       return true
     } else {
       return false
@@ -73,9 +114,7 @@ T.Board = (function() {
   };
 
   var pileCollide = function() {
-    var x = currentBlockCoords.x;
-    var y = currentBlockCoords.y;
-    if (grid[y + 1][x] > 0) {
+    if ((grid[currentBlock[0][1]+1][currentBlock[0][0]] === 2) || (grid[currentBlock[1][1]+1][currentBlock[1][0]] === 2) || (grid[currentBlock[2][1]+1][currentBlock[2][0]] === 2) || (grid[currentBlock[3][1]+1][currentBlock[3][0]]) === 2) {
       return true
     } else {
       return false
@@ -83,10 +122,11 @@ T.Board = (function() {
   };
 
   var blockHitsPile = function() {
-    var x = currentBlockCoords.x;
-    var y = currentBlockCoords.y;
-    grid[y][x] = 2;
-    currentBlockCoords = {};
+    grid[currentBlock[0][1]][currentBlock[0][0]] = 2;
+    grid[currentBlock[1][1]][currentBlock[1][0]] = 2;
+    grid[currentBlock[2][1]][currentBlock[2][0]] = 2;
+    grid[currentBlock[3][1]][currentBlock[3][0]] = 2;
+    currentBlock =  [];
   };
 
   var clearRow = function(rowCoord) {
@@ -101,16 +141,29 @@ T.Board = (function() {
         return sum + val
       });
       if (total === 20) {
-        console.log(j);
         clearRow(j);
       }
     }
   };
 
-  var collision = function() {
+  var collision = function(callbacks) {
     blockHitsPile();
+    checkGameOver(callbacks);
     checkRow();
     addCurrentBlock();
+  };
+
+  var checkGameOver = function(callbacks) {
+    for (i=0; i < 10; i++) {
+      if (grid[3][i] === 2) {
+        callbacks.gameOver();
+      }
+    }
+  };
+
+  var reset = function() {
+    grid = [];
+    currentBlock = [];
   };
 
   return {
@@ -123,7 +176,8 @@ T.Board = (function() {
     floorCollide: floorCollide,
     moveDown: moveDown,
     pileCollide: pileCollide,
-    collision: collision
+    collision: collision,
+    checkGameOver: checkGameOver,
+    reset: reset
   }
-
 })();

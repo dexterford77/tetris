@@ -2,9 +2,12 @@ var T = T || {};
 
 T.View = (function() {
 
-  var init = function(grid, callbacks) {
-    this.generateDivs(grid);
+  var init = function(callbacks) {
     $(document).on("keydown", callbacks.playerControl);
+    $('#play-button').click(function(e){
+      $(e.target).parent('#message').hide();
+      callbacks.startGame();
+    })
   };
 
   var generateDivs = function(grid) {
@@ -37,11 +40,17 @@ T.View = (function() {
     $cells.remove();
   };
 
+  var gameOver = function() {
+    clear();
+    $('#message').show();
+  };
+
   return {
     init: init,
     generateDivs: generateDivs,
     reRender: reRender,
-    clear: clear
+    clear: clear,
+    gameOver: gameOver
   }
 
 })();
