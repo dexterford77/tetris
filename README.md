@@ -7,6 +7,6 @@ Demo
 
 ### NOTES
 
-No-frills Tetris built from the ground up using only basic JavaScript, jQuery, HTML, & CSS. Uses the Model-View-Controller (MVC) & Revealing Module Pattern to organize game logic.
+No-frills Tetris built from the ground up using only basic JavaScript, jQuery, HTML, & CSS. Uses the Model-View-Controller (MVC) & Revealing Module patterns to organize game logic.
 
 No tutorials were used; it is 100% custom code.
