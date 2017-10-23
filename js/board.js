@@ -7,7 +7,6 @@ T.Board = (function() {
   };
 
   const blockTypes = ["square", "bar", "L", "S"];
-  var currentBlockType = "square";
   var currentBlock = [];
   var grid = [];
 
@@ -26,7 +25,7 @@ T.Board = (function() {
   };
 
   var addCurrentBlock = function addCurrentBlock() {
-    // var currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
+    var currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
     createBlock(currentBlockType);
     for (i = 0; i < currentBlock.length; i++) {
       grid[currentBlock[i][1]][currentBlock[i][0]] = 1;
@@ -35,7 +34,7 @@ T.Board = (function() {
 
   var createBlock = function(blockType) {
     var random;
-    if (blockType = "square") {
+    if (blockType === "square") {
       // gets random # btwn 0-8
       random = Math.floor(Math.random() * 9);
       currentBlock = [
@@ -43,6 +42,33 @@ T.Board = (function() {
         [random + 1, 0],
         [random, 1],
         [random + 1, 1]
+      ]
+    } else if (blockType === "bar") {
+      // gets random # btwn 0-9
+      random = Math.floor(Math.random() * 10);
+      currentBlock = [
+        [random, 0],
+        [random, 1],
+        [random, 2],
+        [random, 3]
+      ]
+    } else if (blockType === "L") {
+      // gets random # btwn 0-8
+      random = Math.floor(Math.random() * 9);
+      currentBlock = [
+        [random, 0],
+        [random, 1],
+        [random, 2],
+        [random + 1, 2]
+      ]
+    } else if (blockType === "S") {
+      // gets random # btwn 0-8
+      random = Math.floor(Math.random() * 9);
+      currentBlock = [
+        [random, 0],
+        [random, 1],
+        [random + 1, 1],
+        [random + 1, 2]
       ]
     }
   };
