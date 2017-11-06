@@ -1,12 +1,21 @@
 @import url('https://fonts.googleapis.com/css?family=Pinyon+Script');
 
-h1 {
+h1, h2 {
   text-align: center;
   font-family: "Pinyon Script", cursive;
   color: gold;
+}
+
+h1 {
   font-size: 50px;
   margin-bottom: -2px;
   margin-top: 10px;
+}
+
+h2 {
+  font-size: 35px;
+  margin-top: 20px;
+  margin-bottom: 2px;
 }
 
 body, .bg {
@@ -22,12 +31,22 @@ body, .bg {
                 radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
 }
 
+.grid, .controls {
+  border: 7px groove gold;
+}
+
 .grid {
   width: 230px;
-  border: 7px groove gold;
+  padding: 10px 6px 6px 10px;
   margin: 0 auto;
-  padding: 2px;
   text-align: center;
+}
+
+.controls {
+  float: right;
+  margin-right: 80px;
+  width: 320px;
+  padding-right: 20px;
 }
 
 .cell {

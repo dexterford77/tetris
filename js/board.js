@@ -8,6 +8,8 @@ T.Board = (function() {
 
   const blockTypes = ["square", "bar", "L", "S"];
   var currentBlock = [];
+  var currentBlockType = "";
+  var currentBlockRotation = 0;
   var grid = [];
 
   var getGrid = function(){
@@ -25,7 +27,9 @@ T.Board = (function() {
   };
 
   var addCurrentBlock = function addCurrentBlock() {
-    var currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
+    currentBlockRotation = 0;
+    // currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
+    currentBlockType = "L";
     createBlock(currentBlockType);
     for (i = 0; i < currentBlock.length; i++) {
       grid[currentBlock[i][1]][currentBlock[i][0]] = 1;
@@ -131,6 +135,120 @@ T.Board = (function() {
     }
   };
 
+  var rotate = function(direction) {
+    if (currentBlockType === "L") {
+
+      if (currentBlockRotation === 0) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        currentBlock[0][0] += direction;
+        currentBlock[0][1] += 1;
+        currentBlock[2][0] -= direction;
+        currentBlock[2][1] -= 1;
+        if (direction === -1) {
+          currentBlock[3][1] -= 2;
+        } else if (direction === 1) {
+          currentBlock[3][0] -= 2;
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+        if (currentBlockRotation === -1) {
+          currentBlockRotation = 3;
+        }
+
+      } else if (currentBlockRotation === 1) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        currentBlock[0][0] -= 1;
+        currentBlock[0][1] += direction;
+        currentBlock[2][0] += 1;
+        currentBlock[2][1] -= direction;
+        if (direction === -1) {
+          currentBlock[3][0] += 2;
+        } else if (direction === 1) {
+          currentBlock[3][1] -= 2;
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+
+      } else if (currentBlockRotation === 2) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        currentBlock[0][0] -= direction;
+        currentBlock[0][1] -= 1;
+        currentBlock[2][0] += direction;
+        currentBlock[2][1] += 1;
+        if (direction === -1) {
+          currentBlock[3][1] += 2;
+        } else if (direction === 1) {
+          currentBlock[3][0] += 2;
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+
+      } else if (currentBlockRotation === 3) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        currentBlock[0][0] += 1;
+        currentBlock[0][1] -= direction;
+        currentBlock[2][0] -= 1;
+        currentBlock[2][1] += direction;
+        if (direction === -1) {
+          currentBlock[3][0] -= 2;
+        } else if (direction === 1) {
+          currentBlock[3][1] += 2;
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+        if (currentBlockRotation === 4) {
+          currentBlockRotation = 0;
+        }
+
+      }
+
+    } else if (currentBlockType = "S") {
+
+    } else if (currentBlockType = "bar") {
+
+    }
+  };
+
   var floorCollide = function() {
     if ((currentBlock[0][1] > grid.length-2) || (currentBlock[1][1] > grid.length-2) || (currentBlock[2][1] > grid.length-2) || (currentBlock[3][1] > grid.length-2)) {
       return true
@@ -204,6 +322,7 @@ T.Board = (function() {
     pileCollide: pileCollide,
     collision: collision,
     checkGameOver: checkGameOver,
-    reset: reset
+    reset: reset,
+    rotate: rotate
   }
 })();

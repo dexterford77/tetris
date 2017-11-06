@@ -4,7 +4,7 @@ T.View = (function() {
 
   var init = function(callbacks) {
     $(document).on("keydown", callbacks.playerControl);
-    $('#play-button').click(function(e){
+    $('#play-button').click(function(e) {
       $(e.target).parent('#message').hide();
       callbacks.startGame();
     })

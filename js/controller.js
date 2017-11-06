@@ -43,6 +43,12 @@ T.Controller = (function(board, view){
           gameOver: gameOver
         });
       }
+    } else if (e.which === 90) {
+      // counterclockwise
+      board.rotate(-1);
+    } else if (e.which === 88) {
+      // clockwise
+      board.rotate(1);
     }
   };
 
