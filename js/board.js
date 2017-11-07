@@ -29,7 +29,7 @@ T.Board = (function() {
   var addCurrentBlock = function addCurrentBlock() {
     currentBlockRotation = 0;
     // currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
-    currentBlockType = "L";
+    currentBlockType = "S";
     createBlock(currentBlockType);
     for (i = 0; i < currentBlock.length; i++) {
       grid[currentBlock[i][1]][currentBlock[i][0]] = 1;
@@ -243,6 +243,110 @@ T.Board = (function() {
       }
 
     } else if (currentBlockType = "S") {
+
+      if (currentBlockRotation === 0) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1) {
+          currentBlock[0][0] += 2;
+        } else if (direction === -1) {
+          currentBlock[0][1] += 2;
+        }
+        currentBlock[1][0] += 1;
+        currentBlock[1][1] -= direction;
+        currentBlock[3][0] -= direction;
+        currentBlock[3][1] -= 1;
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+        if (currentBlockRotation === -1) {
+          currentBlockRotation = 3;
+        }
+
+      } else if (currentBlockRotation === 1) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1) {
+          currentBlock[0][1] += 2;
+        } else if (direction === -1) {
+          currentBlock[0][0] -= 2;
+        }
+        currentBlock[1][0] += direction;
+        currentBlock[1][1] += 1;
+        currentBlock[3][0] += 1;
+        currentBlock[3][1] -= direction;
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+
+      } else if (currentBlockRotation === 2) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1) {
+          currentBlock[0][0] -= 2;
+        } else if (direction === -1) {
+          currentBlock[0][1] -= 2;
+        }
+        currentBlock[1][0] -= 1;
+        currentBlock[1][1] += direction;
+        currentBlock[3][0] += direction;
+        currentBlock[3][1] += 1;
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+
+      } else if (currentBlockRotation === 3) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1) {
+          currentBlock[0][1] -= 2;
+        } else if (direction === -1) {
+          currentBlock[0][0] += 2;
+        }
+        currentBlock[1][0] -= direction;
+        currentBlock[1][1] -= 1;
+        currentBlock[3][0] -= 1;
+        currentBlock[3][1] += direction;
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        currentBlockRotation += direction;
+        if (currentBlockRotation === 4) {
+          currentBlockRotation = 0;
+        }
+
+      }
 
     } else if (currentBlockType = "bar") {
 
