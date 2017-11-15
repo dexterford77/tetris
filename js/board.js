@@ -28,9 +28,13 @@ T.Board = (function() {
 
   var addCurrentBlock = function addCurrentBlock() {
     currentBlockRotation = 0;
-    // currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
-    currentBlockType = "S";
+    currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
     createBlock(currentBlockType);
+    var rotations = Math.floor(Math.random() * 5);
+    console.log(rotations);
+    for (j=0; j<rotations; j++) {
+      rotate(1);
+    }
     for (i = 0; i < currentBlock.length; i++) {
       grid[currentBlock[i][1]][currentBlock[i][0]] = 1;
     }
@@ -116,7 +120,7 @@ T.Board = (function() {
   };
 
   var moveDown = function() {
-    if ((grid[currentBlock[0][1]+1][currentBlock[0][0]] === 0) || (grid[currentBlock[1][1]+1][currentBlock[1][0]] === 0) || (grid[currentBlock[2][1]+1][currentBlock[2][0]] === 0) || (grid[currentBlock[3][1]+1][currentBlock[3][0]]) === 0) {
+    if ((grid[currentBlock[0][1]+1][currentBlock[0][0]] === 0) || (grid[currentBlock[1][1]+1][currentBlock[1][0]] === 0) || (grid[currentBlock[2][1]+1][currentBlock[2][0]] === 0) || (grid[currentBlock[3][1]+1][currentBlock[3][0]] === 0)) {
       
       grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
       grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
@@ -136,23 +140,38 @@ T.Board = (function() {
   };
 
   var rotate = function(direction) {
+
     if (currentBlockType === "L") {
 
-      if (currentBlockRotation === 0) {
+      if (currentBlockRotation === 0 && 
+        grid[currentBlock[0][1]+1][currentBlock[0][0]+direction] === 0 &&
+        grid[currentBlock[2][1]-1][currentBlock[2][0]-direction] === 0) {
 
         grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
         grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
         grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
 
-        currentBlock[0][0] += direction;
-        currentBlock[0][1] += 1;
-        currentBlock[2][0] -= direction;
-        currentBlock[2][1] -= 1;
-        if (direction === -1) {
-          currentBlock[3][1] -= 2;
-        } else if (direction === 1) {
+        if (direction === 1 &&
+          grid[currentBlock[3][1]][currentBlock[3][0]-2] === 0
+        ) {
+
+          currentBlock[0][0] += direction;
+          currentBlock[0][1] += 1;
+          currentBlock[2][0] -= direction;
+          currentBlock[2][1] -= 1;
           currentBlock[3][0] -= 2;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[3][1]-2][currentBlock[3][0]] === 0) {
+
+          currentBlock[0][0] += direction;
+          currentBlock[0][1] += 1;
+          currentBlock[2][0] -= direction;
+          currentBlock[2][1] -= 1;
+          currentBlock[3][1] -= 2;
+          currentBlockRotation += direction;
         }
 
         grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
@@ -160,7 +179,334 @@ T.Board = (function() {
         grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
 
-        currentBlockRotation += direction;
+        if (currentBlockRotation === -1) {
+          currentBlockRotation = 3;
+        }
+
+      } else if (currentBlockRotation === 1 &&
+        grid[currentBlock[0][1]+direction][currentBlock[0][0]-1] === 0 &&
+        grid[currentBlock[2][1]-direction][currentBlock[2][0]+1] === 0) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+          grid[currentBlock[3][1]-2][currentBlock[3][0]] === 0) {
+
+          currentBlock[0][0] -= 1;
+          currentBlock[0][1] += direction;
+          currentBlock[2][0] += 1;
+          currentBlock[2][1] -= direction;
+          currentBlock[3][1] -= 2;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[3][1]][currentBlock[3][0]+2] === 0) {
+
+          currentBlock[0][0] -= 1;
+          currentBlock[0][1] += direction;
+          currentBlock[2][0] += 1;
+          currentBlock[2][1] -= direction;
+          currentBlock[3][0] += 2;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+      } else if (currentBlockRotation === 2 &&
+        grid[currentBlock[0][1]-1][currentBlock[0][0]-direction] === 0 &&
+        grid[currentBlock[2][1]+1][currentBlock[2][0]+direction] === 0) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+          grid[currentBlock[3][1]][currentBlock[3][0]+2] === 0) {
+
+          currentBlock[0][0] -= direction;
+          currentBlock[0][1] -= 1;
+          currentBlock[2][0] += direction;
+          currentBlock[2][1] += 1;
+          currentBlock[3][0] += 2;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[3][1]+2][currentBlock[3][0]] === 0) {
+
+          currentBlock[0][0] -= direction;
+          currentBlock[0][1] -= 1;
+          currentBlock[2][0] += direction;
+          currentBlock[2][1] += 1;
+          currentBlock[3][1] += 2;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+      } else if (currentBlockRotation === 3 &&
+          grid[currentBlock[0][1]-direction][currentBlock[0][0]+1] === 0 &&
+          grid[currentBlock[2][1]+direction][currentBlock[2][0]-1] === 0) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+          grid[currentBlock[3][1]+2][currentBlock[0][0]] === 0) {
+
+          currentBlock[0][0] += 1;
+          currentBlock[0][1] -= direction;
+          currentBlock[2][0] -= 1;
+          currentBlock[2][1] += direction;
+          currentBlock[3][1] += 2;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[3][1]][currentBlock[3][0]-2] === 0) {
+
+          currentBlock[0][0] += 1;
+          currentBlock[0][1] -= direction;
+          currentBlock[2][0] -= 1;
+          currentBlock[2][1] += direction;
+          currentBlock[3][0] -= 2;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        if (currentBlockRotation === 4) {
+          currentBlockRotation = 0;
+        }
+
+      }
+
+    } else if (currentBlockType === "S") {
+
+      if (currentBlockRotation === 0 &&
+        (grid[currentBlock[1][1]-direction][currentBlock[1][0]+1] === 0 ||
+          grid[currentBlock[1][1]-direction][currentBlock[1][0]+1] === 1) &&
+        (grid[currentBlock[3][1]-1][currentBlock[3][0]-direction] === 0 ||
+          grid[currentBlock[3][1]-1][currentBlock[3][0]-direction] === 1)) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+        grid[currentBlock[0][1]][currentBlock[0][0]+2] === 0) {
+
+          currentBlock[0][0] += 2;
+          currentBlock[1][0] += 1;
+          currentBlock[1][1] -= direction;
+          currentBlock[3][0] -= direction;
+          currentBlock[3][1] -= 1;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+        grid[currentBlock[0][1]+2][currentBlock[0][0]] === 0) {
+
+          currentBlock[0][1] += 2;
+          currentBlock[1][0] += 1;
+          currentBlock[1][1] -= direction;
+          currentBlock[3][0] -= direction;
+          currentBlock[3][1] -= 1;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        if (currentBlockRotation === -1) {
+          currentBlockRotation = 3;
+        }
+
+      } else if (currentBlockRotation === 1 &&
+        (grid[currentBlock[1][1]+1][currentBlock[1][0]+direction] === 0 ||
+          grid[currentBlock[1][1]+1][currentBlock[1][0]+direction] === 1) &&
+        (grid[currentBlock[3][1]-direction][currentBlock[3][0]+1] === 0 ||
+          grid[currentBlock[3][1]-direction][currentBlock[3][0]+1] === 1)) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+        grid[currentBlock[0][1]+2][currentBlock[0][0]] === 0) {
+
+          currentBlock[0][1] += 2;
+          currentBlock[1][0] += direction;
+          currentBlock[1][1] += 1;
+          currentBlock[3][0] += 1;
+          currentBlock[3][1] -= direction;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+        grid[currentBlock[0][1]][currentBlock[0][0]-2] === 0) {
+
+          currentBlock[0][0] -= 2;
+          currentBlock[1][0] += direction;
+          currentBlock[1][1] += 1;
+          currentBlock[3][0] += 1;
+          currentBlock[3][1] -= direction;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+      } else if (currentBlockRotation === 2 &&
+        (grid[currentBlock[1][1]+direction][currentBlock[1][0]-1] === 0 ||
+          grid[currentBlock[1][1]+direction][currentBlock[1][0]-1] === 1) &&
+        (grid[currentBlock[3][1]+1][currentBlock[3][0]+direction] === 0 ||
+          grid[currentBlock[3][1]+1][currentBlock[3][0]+direction] === 1)) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+          grid[currentBlock[0][1]][currentBlock[0][0]-2] === 0) {
+
+          currentBlock[0][0] -= 2;
+          currentBlock[1][0] -= 1;
+          currentBlock[1][1] += direction;
+          currentBlock[3][0] += direction;
+          currentBlock[3][1] += 1;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[0][1]-2][currentBlock[0][0]] === 0) {
+
+          currentBlock[0][1] -= 2;
+          currentBlock[1][0] -= 1;
+          currentBlock[1][1] += direction;
+          currentBlock[3][0] += direction;
+          currentBlock[3][1] += 1;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+      } else if (currentBlockRotation === 3 &&
+        (grid[currentBlock[1][1]-1][currentBlock[1][0]-direction] === 0 ||
+          grid[currentBlock[1][1]-1][currentBlock[1][0]-direction] === 1) &&
+        (grid[currentBlock[3][1]+direction][currentBlock[3][0]-1] === 0 ||
+          grid[currentBlock[3][1]+direction][currentBlock[3][0]-1] === 1)) {
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 &&
+          grid[currentBlock[0][1]-2][currentBlock[0][0]] === 0) {
+
+          currentBlock[0][1] -= 2;
+          currentBlock[1][0] -= direction;
+          currentBlock[1][1] -= 1;
+          currentBlock[3][0] -= 1;
+          currentBlock[3][1] += direction;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[0][1]][currentBlock[0][0]+2] === 0) {
+
+          currentBlock[0][0] += 2;
+          currentBlock[1][0] -= direction;
+          currentBlock[1][1] -= 1;
+          currentBlock[3][0] -= 1;
+          currentBlock[3][1] += direction;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
+        if (currentBlockRotation === 4) {
+          currentBlockRotation = 0;
+        }
+
+      }
+
+    } else if (currentBlockType === "bar") {
+
+      if (currentBlockRotation === 0) {
+
+        // note: all I did is change the sign; otherwise identical to currentBlockRotation === 2
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
+
+        if (direction === 1 && 
+          grid[currentBlock[0][1]+1][currentBlock[0][0]+2] === 0 &&
+          grid[currentBlock[1][1]][currentBlock[1][0]+1] === 0 &&
+          grid[currentBlock[2][1]-1][currentBlock[2][0]] === 0 &&
+          grid[currentBlock[3][1]-2][currentBlock[3][0]-1] === 0) {
+
+          currentBlock[0][0] += 2;
+          currentBlock[0][1] += 1;
+          currentBlock[1][0] += 1;
+          currentBlock[2][1] -= 1;
+          currentBlock[3][0] -= 1;
+          currentBlock[3][1] -= 2;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[0][1]+2][currentBlock[0][0]-1] === 0 &&
+          grid[currentBlock[1][1]+1][currentBlock[1][0]] === 0 &&
+          grid[currentBlock[2][1]][currentBlock[2][0]+1] === 0 &&
+          grid[currentBlock[3][1]-1][currentBlock[3][0]+2] === 0) {
+
+          currentBlock[0][0] -= 1;
+          currentBlock[0][1] += 2;
+          currentBlock[1][1] += 1;
+          currentBlock[2][0] += 1;
+          currentBlock[3][0] += 2;
+          currentBlock[3][1] -= 1;
+          currentBlockRotation += direction;
+
+        }
+
+        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
+        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
+        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
+        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+
         if (currentBlockRotation === -1) {
           currentBlockRotation = 3;
         }
@@ -172,153 +518,95 @@ T.Board = (function() {
         grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
 
-        currentBlock[0][0] -= 1;
-        currentBlock[0][1] += direction;
-        currentBlock[2][0] += 1;
-        currentBlock[2][1] -= direction;
-        if (direction === -1) {
+        // note: all I did is change the sign; otherwise identical to currentBlockRotation === 3
+
+        if (direction === 1 &&
+          grid[currentBlock[0][1]+2][currentBlock[0][0]-1] === 0 &&
+          grid[currentBlock[1][1]+1][currentBlock[1][0]] === 0 &&
+          grid[currentBlock[2][1]][currentBlock[2][0]+1] === 0 &&
+          grid[currentBlock[3][1]-1][currentBlock[3][0]+2] === 0) {
+
+          // somehow identical to currentBlockRotation === 0, direction === -1
+
+          currentBlock[0][0] -= 1;
+          currentBlock[0][1] += 2;
+          currentBlock[1][1] += 1;
+          currentBlock[2][0] += 1;
           currentBlock[3][0] += 2;
-        } else if (direction === 1) {
-          currentBlock[3][1] -= 2;
+          currentBlock[3][1] -= 1;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[0][1]-1][currentBlock[0][0]-2] === 0 &&
+          grid[currentBlock[1][1]][currentBlock[1][0]-1] === 0 &&
+          grid[currentBlock[2][1]+1][currentBlock[2][0]] === 0 &&
+          grid[currentBlock[3][1]+2][currentBlock[3][0]+1] === 0) {
+
+          // somehow identical to currentBlockRotation === 2, direction === 1
+
+          currentBlock[0][0] -= 2;
+          currentBlock[0][1] -= 1;
+          currentBlock[1][0] -= 1;
+          currentBlock[2][1] += 1;
+          currentBlock[3][0] += 1;
+          currentBlock[3][1] += 2;
+          currentBlockRotation += direction;
+
         }
 
         grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
         grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
         grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
-
-        currentBlockRotation += direction;
 
       } else if (currentBlockRotation === 2) {
 
+        // note: all I did is change the sign; otherwise identical to currentBlockRotation === 0
+
         grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
         grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
         grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
 
-        currentBlock[0][0] -= direction;
-        currentBlock[0][1] -= 1;
-        currentBlock[2][0] += direction;
-        currentBlock[2][1] += 1;
-        if (direction === -1) {
+        if (direction === 1 &&
+          grid[currentBlock[0][1]-1][currentBlock[0][0]-2] === 0 &&
+          grid[currentBlock[1][1]][currentBlock[1][0]-1] === 0 &&
+          grid[currentBlock[2][1]+1][currentBlock[2][0]] === 0 &&
+          grid[currentBlock[3][1]+2][currentBlock[3][0]+1] === 0) {
+
+          // somehow identical to currentBlockRotation === 1, direction === -1
+
+          currentBlock[0][0] -= 2;
+          currentBlock[0][1] -= 1;
+          currentBlock[1][0] -= 1;
+          currentBlock[2][1] += 1;
+          currentBlock[3][0] += 1;
           currentBlock[3][1] += 2;
-        } else if (direction === 1) {
-          currentBlock[3][0] += 2;
-        }
+          currentBlockRotation += direction;
 
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
+        } else if (direction === -1 &&
+          grid[currentBlock[0][1]-2][currentBlock[0][0]+1] === 0 &&
+          grid[currentBlock[1][1]-1][currentBlock[1][0]] === 0 &&
+          grid[currentBlock[2][1]][currentBlock[2][0]-1] === 0 &&
+          grid[currentBlock[3][1]+1][currentBlock[3][0]-2] === 0) {
 
-        currentBlockRotation += direction;
+          // somehow identical to currentBlockRotation === 3, direction === 1
 
-      } else if (currentBlockRotation === 3) {
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
-
-        currentBlock[0][0] += 1;
-        currentBlock[0][1] -= direction;
-        currentBlock[2][0] -= 1;
-        currentBlock[2][1] += direction;
-        if (direction === -1) {
+          currentBlock[0][0] += 1;
+          currentBlock[0][1] -= 2;
+          currentBlock[1][1] -= 1;
+          currentBlock[2][0] -= 1;
           currentBlock[3][0] -= 2;
-        } else if (direction === 1) {
-          currentBlock[3][1] += 2;
+          currentBlock[3][1] += 1;
+          currentBlockRotation += direction;
+
         }
 
         grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
         grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
         grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
-
-        currentBlockRotation += direction;
-        if (currentBlockRotation === 4) {
-          currentBlockRotation = 0;
-        }
-
-      }
-
-    } else if (currentBlockType = "S") {
-
-      if (currentBlockRotation === 0) {
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
-
-        if (direction === 1) {
-          currentBlock[0][0] += 2;
-        } else if (direction === -1) {
-          currentBlock[0][1] += 2;
-        }
-        currentBlock[1][0] += 1;
-        currentBlock[1][1] -= direction;
-        currentBlock[3][0] -= direction;
-        currentBlock[3][1] -= 1;
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
-
-        currentBlockRotation += direction;
-        if (currentBlockRotation === -1) {
-          currentBlockRotation = 3;
-        }
-
-      } else if (currentBlockRotation === 1) {
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
-
-        if (direction === 1) {
-          currentBlock[0][1] += 2;
-        } else if (direction === -1) {
-          currentBlock[0][0] -= 2;
-        }
-        currentBlock[1][0] += direction;
-        currentBlock[1][1] += 1;
-        currentBlock[3][0] += 1;
-        currentBlock[3][1] -= direction;
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
-
-        currentBlockRotation += direction;
-
-      } else if (currentBlockRotation === 2) {
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 0;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
-
-        if (direction === 1) {
-          currentBlock[0][0] -= 2;
-        } else if (direction === -1) {
-          currentBlock[0][1] -= 2;
-        }
-        currentBlock[1][0] -= 1;
-        currentBlock[1][1] += direction;
-        currentBlock[3][0] += direction;
-        currentBlock[3][1] += 1;
-
-        grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
-        grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
-        grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
-        grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
-
-        currentBlockRotation += direction;
-
+        
       } else if (currentBlockRotation === 3) {
 
         grid[currentBlock[0][1]][currentBlock[0][0]] = 0;
@@ -326,30 +614,49 @@ T.Board = (function() {
         grid[currentBlock[2][1]][currentBlock[2][0]] = 0;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 0;
 
-        if (direction === 1) {
+        // note: all I did is change the sign; otherwise identical to currentBlockRotation === 1
+
+        if (direction === 1 &&
+          grid[currentBlock[0][1]-2][currentBlock[0][0]+1] === 0 &&
+          grid[currentBlock[1][1]-1][currentBlock[1][0]] === 0 &&
+          grid[currentBlock[2][1]][currentBlock[2][0]-1] === 0 &&
+          grid[currentBlock[3][1]+1][currentBlock[3][0]-2] === 0) {
+
+          // somehow identical to currentBlockRotation === 2, direction === -1
+
+          currentBlock[0][0] += 1;
           currentBlock[0][1] -= 2;
-        } else if (direction === -1) {
+          currentBlock[1][1] -= 1;
+          currentBlock[2][0] -= 1;
+          currentBlock[3][0] -= 2;
+          currentBlock[3][1] += 1;
+          currentBlockRotation += direction;
+
+        } else if (direction === -1 &&
+          grid[currentBlock[0][1]+1][currentBlock[0][0]+2] === 0 &&
+          grid[currentBlock[1][1]][currentBlock[1][0]+1] === 0 &&
+          grid[currentBlock[2][1]-1][currentBlock[2][0]] === 0 &&
+          grid[currentBlock[3][1]-2][currentBlock[3][0]-1] === 0) {
+
           currentBlock[0][0] += 2;
+          currentBlock[0][1] += 1;
+          currentBlock[1][0] += 1;
+          currentBlock[2][1] -= 1;
+          currentBlock[3][0] -= 1;
+          currentBlock[3][1] -= 2;
+          currentBlockRotation += direction;
+
         }
-        currentBlock[1][0] -= direction;
-        currentBlock[1][1] -= 1;
-        currentBlock[3][0] -= 1;
-        currentBlock[3][1] += direction;
 
         grid[currentBlock[0][1]][currentBlock[0][0]] = 1;
         grid[currentBlock[1][1]][currentBlock[1][0]] = 1;
         grid[currentBlock[2][1]][currentBlock[2][0]] = 1;
         grid[currentBlock[3][1]][currentBlock[3][0]] = 1;
-
-        currentBlockRotation += direction;
+        
         if (currentBlockRotation === 4) {
           currentBlockRotation = 0;
         }
-
       }
-
-    } else if (currentBlockType = "bar") {
-
     }
   };
 
