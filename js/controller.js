@@ -2,7 +2,9 @@ var T = T || {};
 
 T.Controller = (function(board, view){
 
-  var speed = 200;
+  var displaySpeed = 5;
+  var gameSpeed = 200;
+  var timeCounter = 0;
 
   var init = function init() {
     view.init({
@@ -16,18 +18,23 @@ T.Controller = (function(board, view){
     var grid = board.getGrid();
     view.generateDivs(grid);
     board.addCurrentBlock();
-    var gameLoop = setInterval(loop, speed);
+    var gameLoop = setInterval(loop, displaySpeed);
   };
 
   var loop = function() {
+    board.runChecks();
     view.reRender(board.getGrid());
-    if (board.floorCollide() !== true && board.pileCollide() !== true) {
-      board.blockFall();
-    } else {
-      board.collision({
-        gameOver: gameOver
-      });
+    if (timeCounter === gameSpeed) {
+      if (board.floorCollide() !== true && board.pileCollide() !== true) {
+        board.blockFall();
+      } else {
+        board.collision({
+          gameOver: gameOver
+        });
+      }
+      timeCounter = 0;
     }
+    timeCounter += displaySpeed;
   };
 
   var playerControl = function(e) {

@@ -23,6 +23,8 @@ T.View = (function() {
             $cell.addClass('block');
           } else if (cell === 2) {
             $cell.addClass("pile");
+          } else if (cell === 3) {
+            $cell.addClass("flicker");
           }
           $grid.append($cell);
         });

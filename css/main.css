@@ -66,3 +66,7 @@ body, .bg {
 .pile {
   background-color: orange;
 }
+
+.flicker {
+  background-color: rgb(0, 155, 255);
+}

@@ -11,6 +11,7 @@ T.Board = (function() {
   var currentBlockType = "";
   var currentBlockRotation = 0;
   var grid = [];
+  var flickerCounter = 0;
 
   var getGrid = function(){
     return grid;
@@ -31,7 +32,6 @@ T.Board = (function() {
     currentBlockType = blockTypes[Math.floor(Math.random() * blockTypes.length)];
     createBlock(currentBlockType);
     var rotations = Math.floor(Math.random() * 5);
-    console.log(rotations);
     for (j=0; j<rotations; j++) {
       rotate(1);
     }
@@ -685,8 +685,12 @@ T.Board = (function() {
   };
 
   var clearRow = function(rowCoord) {
-    grid.splice(rowCoord, 1);
-    grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    if (flickerCounter === 2) {
+      grid.splice(rowCoord, 1);
+      grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      flickerCounter = 0;
+    }
+    flickerCounter += 1;
   };
 
   var checkRow = function() {
@@ -696,7 +700,20 @@ T.Board = (function() {
         return sum + val
       });
       if (total === 20) {
-        clearRow(j);
+        flickerRow(j);
+      }
+    }
+  };
+
+  var flickerRow = function(rowCoord) {
+    grid.splice(rowCoord, 1, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]);
+  };
+
+  var runChecks = function() {
+    for (i=0; i<grid.length; i++) {
+      // clean up any currently "flickering" rows
+      if (grid[i][0] === 3) {
+        clearRow(i);
       }
     }
   };
@@ -734,6 +751,7 @@ T.Board = (function() {
     collision: collision,
     checkGameOver: checkGameOver,
     reset: reset,
-    rotate: rotate
+    rotate: rotate,
+    runChecks: runChecks
   }
 })();
