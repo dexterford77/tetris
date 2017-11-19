@@ -4,6 +4,7 @@ T.Board = (function() {
 
   var init = function init() {
     this.generateBoard();
+    gameIsOver = false;
   };
 
   const blockTypes = ["square", "bar", "L", "S"];
@@ -13,6 +14,7 @@ T.Board = (function() {
   var grid = [];
   var flickerCounter = 0;
   var score = 0;
+  var gameIsOver = false;
 
   var getGrid = function() {
     return grid
@@ -727,14 +729,20 @@ T.Board = (function() {
   var collision = function(callbacks) {
     blockHitsPile();
     checkGameOver(callbacks);
-    checkRow();
-    addCurrentBlock();
+    if (gameIsOver === false) {
+      checkRow();
+      addCurrentBlock();
+    }
   };
 
   var checkGameOver = function(callbacks) {
-    for (i=0; i < 10; i++) {
-      if (grid[3][i] === 2) {
-        callbacks.gameOver();
+    if (gameIsOver === false) {
+      for (i=0; i < 10; i++) {
+        if (grid[3][i] === 2) {
+          callbacks.gameOver();
+          gameIsOver = true;
+          break;
+        }
       }
     }
   };

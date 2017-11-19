@@ -2,12 +2,15 @@ var T = T || {};
 
 T.View = (function() {
 
+  var initDiff = 1;
+
   var init = function(callbacks) {
     $(document).on("keydown", callbacks.playerControl);
     $('#play-button').click(function(e) {
-      $(e.target).parent('#message').hide();
-      callbacks.startGame();
-    })
+      $(e.target).parent().parent().children().hide();
+      initDiff = $('#initDiff').val();
+      callbacks.startGame(initDiff);
+    });
   };
 
   var generateDivs = function(grid) {
@@ -49,7 +52,7 @@ T.View = (function() {
 
   var gameOver = function() {
     clear();
-    $('#message').show();
+    $('#message').children().show();
   };
 
   return {
