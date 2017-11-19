@@ -1,9 +1,28 @@
 @import url('https://fonts.googleapis.com/css?family=Pinyon+Script');
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+
+body {
+  min-width: 1250px;
+}
+
+body, .grid-container {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  position: absolute;
+}
+
+.grid-container {
+  background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
+                radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
+}
 
 h1, h2 {
   text-align: center;
   font-family: "Pinyon Script", cursive;
   color: gold;
+  text-shadow: 2px 2px 5px grey;
 }
 
 h1 {
@@ -18,24 +37,28 @@ h2 {
   margin-bottom: 2px;
 }
 
-body, .bg {
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  position: absolute;
-}
-
-.bg {
-  background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
-                radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
-}
-
-.grid, .controls {
+.grid, .controls, .score {
   border: 7px groove gold;
+  vertical-align: top;
+  box-shadow: 2px 2px 5px grey;
+}
+
+.score {
+  width: 300px;
+  float: right;
+  margin-right: 110px;
+}
+
+.score p {
+  text-align: center;
+  font-size: 50px;
+  padding: 0 0 10px 0;
+  margin: 0;
+  font-family: "Orbitron";
 }
 
 .grid {
+  display: block;
   width: 230px;
   padding: 10px 6px 6px 10px;
   margin: 0 auto;
@@ -43,10 +66,11 @@ body, .bg {
 }
 
 .controls {
-  float: right;
-  margin-right: 80px;
-  width: 320px;
-  padding-right: 20px;
+  width: 380px;
+  float: left;
+  margin-left: 40px;
+  padding-right: 5px;
+  color: #111111;
 }
 
 .cell {

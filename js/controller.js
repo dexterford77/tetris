@@ -23,7 +23,7 @@ T.Controller = (function(board, view){
 
   var loop = function() {
     board.runChecks();
-    view.reRender(board.getGrid());
+    view.reRender(board.getGrid(), board.getScore());
     if (timeCounter === gameSpeed) {
       if (board.floorCollide() !== true && board.pileCollide() !== true) {
         board.blockFall();

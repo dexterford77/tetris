@@ -32,9 +32,14 @@ T.View = (function() {
     });
   };
 
-  var reRender = function reRender(grid) {
+  var renderScore = function(score) {
+    $(".score p").text(score);
+  };
+
+  var reRender = function reRender(grid, score) {
     this.clear();
     this.generateDivs(grid);
+    this.renderScore(score);
   };
 
   var clear = function clear() {
@@ -52,7 +57,8 @@ T.View = (function() {
     generateDivs: generateDivs,
     reRender: reRender,
     clear: clear,
-    gameOver: gameOver
+    gameOver: gameOver,
+    renderScore: renderScore
   }
 
 })();

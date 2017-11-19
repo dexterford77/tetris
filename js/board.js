@@ -12,9 +12,14 @@ T.Board = (function() {
   var currentBlockRotation = 0;
   var grid = [];
   var flickerCounter = 0;
+  var score = 0;
 
-  var getGrid = function(){
-    return grid;
+  var getGrid = function() {
+    return grid
+  };
+
+  var getScore = function() {
+    return score
   };
 
   var generateBoard = function() {
@@ -688,6 +693,7 @@ T.Board = (function() {
     if (flickerCounter === 2) {
       grid.splice(rowCoord, 1);
       grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      score += 10;
       flickerCounter = 0;
     }
     flickerCounter += 1;
@@ -752,6 +758,7 @@ T.Board = (function() {
     checkGameOver: checkGameOver,
     reset: reset,
     rotate: rotate,
-    runChecks: runChecks
+    runChecks: runChecks,
+    getScore: getScore
   }
 })();
