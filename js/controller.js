@@ -38,7 +38,7 @@ T.Controller = (function(board, view){
         });
       }
       difficultyCounter += 1;
-      if (difficultyCounter === 50 && gameSpeed > 5) {
+      if (difficultyCounter === 250 && gameSpeed > 5) {
         gameSpeed -= 5;
         difficultyCounter = -1;
       }
