@@ -1,5 +1,12 @@
 # Tetris Gold Edition
 
+Overview
+--------
+
+The classic Tetris game, built from the ground up using JavaScript, jQuery, HTML, & CSS. Game logic built using Model-View-Controller (MVC) & Revealing Module patterns.
+
+Game logic was worked out using a pencil & paper -- no tutorials or guides were used.
+
 Launched Demo
 --------
 
@@ -16,9 +23,3 @@ If you don't keep up the pace, your bricks will begin to stack up. When they bec
 Use the left & right arrow keys to move your pieces left & right.
 Use the down arrow key to make a piece slide down faster.
 COMING SOON: Use Z & X to flip a piece clockwise or counterclockwise.
-
-### NOTES
-
-No-frills Tetris built from the ground up using only basic JavaScript, jQuery, HTML, & CSS. Uses the Model-View-Controller (MVC) & Revealing Module patterns to organize game logic.
-
-No tutorials were used; it is 100% custom code.
