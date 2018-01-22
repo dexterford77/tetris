@@ -3,7 +3,7 @@
 Overview
 --------
 
-The classic Tetris game, built from the ground up using JavaScript, jQuery, HTML, & CSS. Game logic built using Model-View-Controller (MVC) & Revealing Module patterns. Game logic was worked out using a pencil & paper -- no tutorials or guides were used.
+The classic Tetris game, built from the ground up using JavaScript & jQuery in homespun Model-View-Controller (MVC) and Revealing Module patterns. Also uses HTML5 & CSS3. Game logic worked out using a pencil & paper -- no tutorials or guides were used.
 
 Launched Demo
 --------
